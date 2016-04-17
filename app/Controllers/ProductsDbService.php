@@ -42,4 +42,23 @@ class ProductsDbService extends DbManager
 
         return $this->getConnection()->lastInsertId();
     }
+
+    /**
+     * Find a product given its slug.
+     *
+     * @param $slug
+     * @return mixed
+     */
+    public function findBySlug($slug)
+    {
+        $query = 'SELECT * FROM `'.getenv('DB_NAME').'`.`products` WHERE `slug` = :slug';
+
+        $statement = $this->getConnection()->prepare($query);
+
+        $statement->bindParam(':slug', $slug, PDO::PARAM_STR);
+
+        $statement->execute();
+
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
 }
