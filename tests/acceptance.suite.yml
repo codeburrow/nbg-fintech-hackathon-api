@@ -1,0 +1,12 @@
+class_name: AcceptanceTester
+modules:
+    enabled:
+        - \Helper\Acceptance
+        - Asserts
+        - PhpBrowser:
+            url: 'https://fintech.app/'
+            browser: phantomjs
+        - REST:
+            depends: PhpBrowser
+            url: 'https://fintech.app/'
+

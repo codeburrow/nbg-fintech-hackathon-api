@@ -1,0 +1,14 @@
+{
+  "name": "codeburrow/nbg-fintech-hackathon-api",
+  "description": "API providing payment, tracking, and product payment status.",
+  "license": "GNU GENERAL PUBLIC LICENSE",
+  "authors": [
+    {
+      "name": "Rizart Dokollari",
+      "email": "r.dokollari@gmail.com"
+    }
+  ],
+  "require-dev": {
+    "codeception/codeception": "^2.1"
+  }
+}
