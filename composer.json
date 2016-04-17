@@ -16,6 +16,7 @@
     "cocur/slugify": "^2.1"
   },
   "require-dev": {
+    "ext-xsl": "*",
     "codeception/codeception": "^2.1"
   },
   "autoload": {
