@@ -120,7 +120,7 @@ class ProductDbService extends DbManager implements ProductService
         $slug = $data['slug'];
         $price = isset($data['price']) ? $data['price'] : null;
         $description = isset($data['description']) ? $data['description'] : null;
-        $payed = isset($data['payed']) ? $data['payed'] : '0';
+        $payed = isset($data['payed']) ? $data['payed'] : 0;
 
         $statement = $this->getConnection()->prepare($query);
 
@@ -128,7 +128,7 @@ class ProductDbService extends DbManager implements ProductService
         $statement->bindParam(':slug', $slug, PDO::PARAM_STR);
         $statement->bindParam(':price', $price, PDO::PARAM_STR);
         $statement->bindParam(':description', $description, PDO::PARAM_STR);
-        $statement->bindParam(':payed', $payed, PDO::PARAM_STR);
+        $statement->bindParam(':payed', $payed, PDO::PARAM_INT);
         $statement->execute();
 
         return $this->getConnection()->lastInsertId();

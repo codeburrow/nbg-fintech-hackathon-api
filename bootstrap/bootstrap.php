@@ -12,6 +12,7 @@ use App\Kernel\DbManager;
 use App\Kernel\IoC;
 use App\Kernel\Router;
 use App\Requests\Api\ProductsPayRequest;
+use App\Transformers\Api\ProductsApiTransformer;
 use Cocur\Slugify\Slugify;
 
 try {
@@ -57,7 +58,7 @@ IoC::register(WelcomeController::class, function () {
 });
 
 IoC::register(ProductsController::class, function () {
-    $productsController = new ProductsController(new ProductDbService());
+    $productsController = new ProductsController(new ProductDbService(), new ProductsApiTransformer());
 
     return $productsController;
 });
@@ -82,7 +83,13 @@ IoC::register(Slugify::class, function () {
 });
 
 IoC::register(ProductsPayRequest::class, function () {
-    $productsPayRequest = new ProductsPayRequest(IoC::resolve(ProductService::class));
+    $productsPayRequest = new ProductsPayRequest(IoC::resolve(ProductService::class, new ProductsApiTransformer));
+
+    return $productsPayRequest;
+});
+
+IoC::register(ProductsPayRequest::class, function () {
+    $productsPayRequest = new ProductsPayRequest(IoC::resolve(ProductService::class, new ProductsApiTransformer));
 
     return $productsPayRequest;
 });

@@ -27,10 +27,12 @@ class ProductsCest
             'description' => 'some-description',
         ];
         $expectedData = $data;
-        $expectedData['payed'] = 1;
 
         $productsDbService = new ProductDbService();
         $productsDbService->create($data);
+
+//        var_dump($productsDbService->findBySlug('some-slug'));exit;
+        $I->assertSame('0', $productsDbService->findBySlug('some-slug')['payed']);
 
         $I->amOnPage("/api/v1/products/pay?product-slug={$data['slug']}");
 

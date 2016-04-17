@@ -24,7 +24,6 @@ class ProductsCest
             'name'        => 'expected-name',
             'price'       => 'expected-price',
             'description' => 'expected-description',
-            'payed'       => '1',
         ];
 
         $I->dontSeeInDatabase('products', $expectedData);
@@ -32,6 +31,8 @@ class ProductsCest
         $productsDbService = new ProductDbService();
 
         $I->assertNotSame(false, $actualProductId = $productsDbService->create($expectedData));
+
+        $expectedData['payed'] = 0;
 
         $I->seeInDatabase('products', $expectedData);
     }
