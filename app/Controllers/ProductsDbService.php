@@ -131,4 +131,24 @@ class ProductsDbService extends DbManager
 
         return $this->getConnection()->lastInsertId();
     }
+
+    /**
+     * Change a product payed status to true.
+     *
+     * @param $slug string The slug of the product.
+     * @return bool
+     */
+    public function payBySlug($slug)
+    {
+        $query =
+            'UPDATE `'.getenv('DB_NAME').'`.`'.ProductsTableMigration::TABLE_NAME.'` 
+             SET `payed`=\'1\' 
+             WHERE `slug`=:slug;';
+
+        $statement = $this->getConnection()->prepare($query);
+
+        $statement->bindParam(':slug', $slug, PDO::PARAM_STR);
+
+        return $statement->execute();
+    }
 }

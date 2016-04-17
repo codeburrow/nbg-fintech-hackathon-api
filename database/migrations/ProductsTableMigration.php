@@ -68,6 +68,7 @@ class ProductsTableMigration implements Migration
               `slug` VARCHAR(255) NOT NULL,
               `price` VARCHAR(255) NOT NULL,
               `description` TEXT NOT NULL,
+              `payed` TINYINT(1) NOT NULL DEFAULT 0,
             PRIMARY KEY (`id`),
             UNIQUE INDEX `name_UNIQUE` (`name` ASC),
             UNIQUE INDEX `slug_UNIQUE` (`slug` ASC));';

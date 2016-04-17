@@ -14,7 +14,6 @@ class ProductsCest
     {
     }
 
-
     /**
      * @test
      * @param IntegrationTester $I
@@ -26,6 +25,7 @@ class ProductsCest
             'name'        => 'expected-name',
             'price'       => 'expected-price',
             'description' => 'expected-description',
+            'payed'       => 1,
         ];
 
         $I->dontSeeInDatabase('products', $expectedData);
@@ -48,6 +48,7 @@ class ProductsCest
             'name'        => 'expected-name',
             'price'       => 'expected-price',
             'description' => 'expected-description',
+            'payed'       => 1,
         ];
 
         $expectedProductId = $I->haveInDatabase('products', $expectedData);
@@ -58,7 +59,7 @@ class ProductsCest
         $I->assertEquals($expectedProductId, $actualProduct['id']);
 
         $I->assertEquals($expectedData,
-            array_intersect_key($actualProduct, array_flip(['slug', 'name', 'price', 'description'])));
+            array_intersect_key($actualProduct, array_flip(['slug', 'name', 'price', 'description', 'payed'])));
     }
 
     /**
@@ -76,6 +77,7 @@ class ProductsCest
                     'name'        => 'expected-name-old',
                     'price'       => 'expected-price-old',
                     'description' => 'expected-description-old',
+                    'payed'       => 1,
                 ],
             'new' =>
                 [
@@ -83,6 +85,7 @@ class ProductsCest
                     'name'        => 'expected-name-new',
                     'price'       => 'expected-price-new',
                     'description' => 'expected-description-new',
+                    'payed'       => 0,
                 ],
         ];
 
@@ -107,6 +110,7 @@ class ProductsCest
             'name'        => 'expected-name-old',
             'price'       => 'expected-price-old',
             'description' => 'expected-description-old',
+            'payed'       => 1,
         ];
 
         $I->dontSeeInDatabase('products', $expectedData);
@@ -131,6 +135,7 @@ class ProductsCest
                     'name'        => 'name-old',
                     'price'       => 'price-old',
                     'description' => 'description-old',
+                    'payed'       => 0,
                 ],
             'new' =>
                 [
@@ -138,6 +143,7 @@ class ProductsCest
                     'name'        => 'name-new',
                     'price'       => 'price-new',
                     'description' => 'description-new',
+                    'payed'       => 1,
                 ],
         ];
 
@@ -162,6 +168,7 @@ class ProductsCest
             'name'        => 'expected-name',
             'price'       => 'expected-price',
             'description' => 'expected-description',
+            'payed'       => 1,
         ];
 
         $productId = $I->haveInDatabase('products', $expectedData);
@@ -176,4 +183,26 @@ class ProductsCest
             array_intersect_key($actualProduct, array_flip(['slug', 'name', 'price', 'description'])));
     }
 
+    /**
+     * @test
+     * @param IntegrationTester $I
+     */
+    public function it_pays_a_product(IntegrationTester $I)
+    {
+        $productData = [
+            'slug'        => 'expected-slug',
+            'name'        => 'expected-name',
+            'price'       => 'expected-price',
+            'description' => 'expected-description',
+        ];
+
+        $I->haveInDatabase('products', $productData);
+        $I->seeInDatabase('products', $productData + ['payed' => 0]);
+
+        $productsDbService = IoC::resolve(ProductsDbService::class);
+
+        $I->assertTrue($productsDbService->payBySlug($productData['slug']));
+
+        $I->seeInDatabase('products', $productData + ['payed' => 1]);
+    }
 }
