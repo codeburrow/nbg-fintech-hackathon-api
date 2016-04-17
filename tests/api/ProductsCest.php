@@ -3,6 +3,7 @@
 
 use ApiTester;
 use App\DbServices\Product\ProductDbService;
+use App\Transformers\Api\ProductsApiTransformer;
 
 class ProductsCest
 {
@@ -74,7 +75,7 @@ class ProductsCest
      */
     public function it_reads_products_index(ApiTester $I)
     {
-        $data = [
+        $expectedData = [
             [
                 'slug'        => 'some-slug',
                 'name'        => 'some-name',
@@ -90,10 +91,8 @@ class ProductsCest
         ];
         $productsDbService = new ProductDbService();
 
-        $productsDbService->create($data[0]);
-        $productsDbService->create($data[1]);
-
-        $expectedData = $productsDbService->get();
+        $productsDbService->create($expectedData[0]);
+        $productsDbService->create($expectedData[1]);
 
         $I->amOnPage('/api/v1/products');
 

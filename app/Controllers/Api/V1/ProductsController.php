@@ -58,4 +58,14 @@ class ProductsController
 
         return $this->respondInternalServerError();
     }
+
+    /**
+     * Get all products.
+     */
+    public function index()
+    {
+        $products = $this->productService->get();
+
+        return $this->respondWithSuccess($this->transformer->transformCollection($products));
+    }
 }
