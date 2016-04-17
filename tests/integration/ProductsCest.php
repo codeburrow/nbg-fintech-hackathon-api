@@ -25,7 +25,7 @@ class ProductsCest
             'name'        => 'expected-name',
             'price'       => 'expected-price',
             'description' => 'expected-description',
-            'payed'       => 1,
+            'payed'       => '1',
         ];
 
         $I->dontSeeInDatabase('products', $expectedData);
@@ -110,12 +110,12 @@ class ProductsCest
             'name'        => 'expected-name-old',
             'price'       => 'expected-price-old',
             'description' => 'expected-description-old',
-            'payed'       => 1,
+            'payed'       => '1',
         ];
 
         $I->dontSeeInDatabase('products', $expectedData);
 
-        $I->assertNotSame(false, $actualProduct = $productDbService->updateOrCreate($expectedData));
+        $I->assertTrue(false !== $productDbService->updateOrCreate($expectedData));
 
         $I->seeInDatabase('products', $expectedData);
     }
@@ -180,7 +180,7 @@ class ProductsCest
         $I->assertEquals($productId, $actualProduct['id']);
 
         $I->assertEquals($expectedData,
-            array_intersect_key($actualProduct, array_flip(['slug', 'name', 'price', 'description'])));
+            array_intersect_key($actualProduct, array_flip(['slug', 'name', 'price', 'description', 'payed'])));
     }
 
     /**

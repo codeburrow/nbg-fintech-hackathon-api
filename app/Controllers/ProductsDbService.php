@@ -57,7 +57,7 @@ class ProductsDbService extends DbManager
     /**
      * Update a product given its slug.
      *
-     * @param $data 'name', 'slug' are required, and must been already been validate for uniqueness.
+     * @param $data 'name', 'slug', 'payed' are required, and must been already validated as needed.
      * @param $oldSlug string Must be already validated for existence.
      * @return mixed
      */
@@ -65,20 +65,20 @@ class ProductsDbService extends DbManager
     {
         $query =
             'UPDATE `'.getenv('DB_NAME').'`.`'.ProductsTableMigration::TABLE_NAME.'` 
-             SET `name`=:name, `slug`=:slug, `price`=:price, `description`=:description 
+             SET `name`=:name, `slug`=:slug, `price`=:price, `description`=:description,
+             `payed`=:payed 
              WHERE `slug`=:oldSlug;';
 
-        $name = $data['name'];
-        $slug = $data['slug'];
         $price = isset($data['price']) ? $data['price'] : null;
         $description = isset($data['description']) ? $data['description'] : null;
 
         $statement = $this->getConnection()->prepare($query);
 
-        $statement->bindParam(':name', $name, PDO::PARAM_STR);
-        $statement->bindParam(':slug', $slug, PDO::PARAM_STR);
+        $statement->bindParam(':name', $data['name'], PDO::PARAM_STR);
+        $statement->bindParam(':slug', $data['slug'], PDO::PARAM_STR);
         $statement->bindParam(':price', $price, PDO::PARAM_STR);
         $statement->bindParam(':description', $description, PDO::PARAM_STR);
+        $statement->bindParam(':payed', $data['payed'], PDO::PARAM_STR);
         $statement->bindParam(':oldSlug', $oldSlug, PDO::PARAM_STR);
 
         return $statement->execute();
@@ -106,20 +106,21 @@ class ProductsDbService extends DbManager
     /**
      * Create a product.
      *
-     * @param $data 'name' and 'key' are required, and must been already been validate for uniqueness.
+     * @param $data 'name' and 'slug' keys are required, and must been already been validated as needed.
      *
      * @return mixed
      */
     public function create($data)
     {
         $query =
-            'INSERT INTO `'.getenv('DB_NAME').'`.`products` (`name`, `slug`, `price`, `description`) 
-            VALUES (:name, :slug, :price, :description);';
+            'INSERT INTO `'.getenv('DB_NAME').'`.`products` (`name`, `slug`, `price`, `description`, `payed`) 
+            VALUES (:name, :slug, :price, :description, :payed);';
 
         $name = $data['name'];
         $slug = $data['slug'];
         $price = isset($data['price']) ? $data['price'] : null;
         $description = isset($data['description']) ? $data['description'] : null;
+        $payed = isset($data['payed']) ? $data['payed'] : '0';
 
         $statement = $this->getConnection()->prepare($query);
 
@@ -127,6 +128,7 @@ class ProductsDbService extends DbManager
         $statement->bindParam(':slug', $slug, PDO::PARAM_STR);
         $statement->bindParam(':price', $price, PDO::PARAM_STR);
         $statement->bindParam(':description', $description, PDO::PARAM_STR);
+        $statement->bindParam(':payed', $payed, PDO::PARAM_STR);
         $statement->execute();
 
         return $this->getConnection()->lastInsertId();
