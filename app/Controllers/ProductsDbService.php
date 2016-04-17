@@ -19,67 +19,39 @@ class ProductsDbService extends DbManager
      * Update a product if the given slug exists.
      * Create a product if the given slug does not exists.
      *
-     * @param $data 'name' and 'key' are required, and must been already been validate for uniqueness.
+     * @param $data 'name' and 'slug' are required, and must been already been validate for uniqueness.
+     * @param 'name' and 'slug' are required, and must been already been validate for uniqueness.
      *
      * @return mixed
      */
     public function updateOrCreate($data)
     {
         if (false !== ($fund = $this->findBySlug($data['slug']))) {
-            return $this->update($data);
+            return $this->updateBySlug($data, $data['slug']);
         }
 
         return $this->findById(
-            $this->create(['name' => $name])
+            $this->create($data)
         );
     }
 
     /**
-     * Find a product given its slug.
+     * Find a product given its id.
      *
-     * @param $slug
+     * @param $id
      * @return mixed
      */
-    public function findBySlug($slug)
+    public function findById($id)
     {
-        $query = 'SELECT * FROM `'.getenv('DB_NAME').'`.`products` WHERE `slug` = :slug';
+        $query = 'SELECT * FROM `'.getenv('DB_NAME').'`.`'.ProductsTableMigration::TABLE_NAME.'` WHERE `id` = :id';
 
         $statement = $this->getConnection()->prepare($query);
 
-        $statement->bindParam(':slug', $slug, PDO::PARAM_STR);
+        $statement->bindParam(':id', $id, PDO::PARAM_INT);
 
         $statement->execute();
 
         return $statement->fetch(PDO::FETCH_ASSOC);
-    }
-
-    /**
-     * Create a product.
-     *
-     * @param $data 'name' and 'key' are required, and must been already been validate for uniqueness.
-     *
-     * @return mixed
-     */
-    public function create($data)
-    {
-        $query =
-            'INSERT INTO `'.getenv('DB_NAME').'`.`products` (`name`, `slug`, `price`, `description`) 
-            VALUES (:name, :slug, :price, :description);';
-
-        $name = $data['name'];
-        $slug = $data['slug'];
-        $price = isset($data['price']) ? $data['price'] : null;
-        $description = isset($data['description']) ? $data['description'] : null;
-
-        $statement = $this->getConnection()->prepare($query);
-
-        $statement->bindParam(':name', $name, PDO::PARAM_STR);
-        $statement->bindParam(':slug', $slug, PDO::PARAM_STR);
-        $statement->bindParam(':price', $price, PDO::PARAM_STR);
-        $statement->bindParam(':description', $description, PDO::PARAM_STR);
-        $statement->execute();
-
-        return $this->getConnection()->lastInsertId();
     }
 
     /**
@@ -110,5 +82,34 @@ class ProductsDbService extends DbManager
         $statement->bindParam(':oldSlug', $oldSlug, PDO::PARAM_STR);
 
         return $statement->execute();
+    }
+
+    /**
+     * Create a product.
+     *
+     * @param $data 'name' and 'key' are required, and must been already been validate for uniqueness.
+     *
+     * @return mixed
+     */
+    public function create($data)
+    {
+        $query =
+            'INSERT INTO `'.getenv('DB_NAME').'`.`products` (`name`, `slug`, `price`, `description`) 
+            VALUES (:name, :slug, :price, :description);';
+
+        $name = $data['name'];
+        $slug = $data['slug'];
+        $price = isset($data['price']) ? $data['price'] : null;
+        $description = isset($data['description']) ? $data['description'] : null;
+
+        $statement = $this->getConnection()->prepare($query);
+
+        $statement->bindParam(':name', $name, PDO::PARAM_STR);
+        $statement->bindParam(':slug', $slug, PDO::PARAM_STR);
+        $statement->bindParam(':price', $price, PDO::PARAM_STR);
+        $statement->bindParam(':description', $description, PDO::PARAM_STR);
+        $statement->execute();
+
+        return $this->getConnection()->lastInsertId();
     }
 }

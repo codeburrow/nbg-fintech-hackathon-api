@@ -163,4 +163,29 @@ class ProductsCest
 
         $I->seeInDatabase('products', $expectedData['new']);
     }
+
+    /**
+     * @test
+     * @param IntegrationTester $I
+     */
+    public function it_finds_category_by_id(IntegrationTester $I)
+    {
+        $expectedData = [
+            'slug'        => 'expected-slug',
+            'name'        => 'expected-name',
+            'price'       => 'expected-price',
+            'description' => 'expected-description',
+        ];
+
+        $productId = $I->haveInDatabase('products', $expectedData);
+
+        $productsDbService = IoC::resolve(ProductsDbService::class);
+
+        $actualProduct = $productsDbService->findById($productId);
+
+        $I->assertEquals($productId, $actualProduct['id']);
+
+        $I->assertEquals($expectedData,
+            array_intersect_key($actualProduct, array_flip(['slug', 'name', 'price', 'description'])));
+    }
 }
