@@ -40,7 +40,7 @@ class ProductsController
     }
 
     /**
-     * @api            {get} api/v1/products/pay?product-slug={product_slug} Pay
+     * @api            {get} api/v1/products/payment/request?product-slug={product_slug} Pay
      * @apiPermission  none
      * @apiVersion     1.0.0
      * @apiName        PayProducts
@@ -48,7 +48,7 @@ class ProductsController
      * @apiDescription Make a  payment give a product slug.
      * @apiExample {curl} Example usage:
      *
-     * curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X GET "http://zapit-web.herokuapp.com/api/v1/products/pay?product-slug=iot"
+     * curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X GET "http://zapit-web.herokuapp.com/api/v1/products/payment/request?product-slug=iot"
      *
      * @apiSuccess {String} status_code Request status.
      * @apiSuccess {String[]} data The updated product details info.
@@ -76,7 +76,7 @@ class ProductsController
      * Expects a $_GET key of 'product-slug'. The ProductsPayRequest will make sure this exists.
      * Pay for a product.
      */
-    public function pay()
+    public function requestPayment()
     {
         IoC::resolve(ProductsPayRequest::class)
             ->validate();
@@ -145,7 +145,7 @@ class ProductsController
     }
 
     /**
-     * @api            {get} api/v1/products/reset-payment?product-slug={product_slug} Reset payment
+     * @api            {get} api/v1/products/payment/reset?product-slug={product_slug} Reset payment
      * @apiPermission  none
      * @apiVersion     1.0.0
      * @apiName        ResetPaymentProducts
@@ -153,7 +153,7 @@ class ProductsController
      * @apiDescription Reset the payment of a product. To be used for the android debugging.
      * @apiExample {curl} Example usage:
      *
-     * curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X GET "http://zapit-web.herokuapp.com/api/v1/products/reset-payment?product-slug=iot"
+     * curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X GET "http://zapit-web.herokuapp.com/api/v1/products/payment/reset?product-slug=iot"
      *
      * @apiSuccess {String} status_code Request status.
      * @apiSuccess {String[]} data The updated product details info.
@@ -181,7 +181,7 @@ class ProductsController
      * Expects a $_GET key of 'product-slug'. The ProductsPayRequest will make sure this exists.
      * Pay for a product.
      */
-    public function reset()
+    public function resetPayment()
     {
         IoC::resolve(ProductsPayRequest::class)
             ->validate();
@@ -195,5 +195,54 @@ class ProductsController
         }
 
         return $this->respondInternalServerError();
+    }
+
+    /**
+     * @api            {get} api/v1/products/payment/status?product-slug={product_slug} Check payment
+     * @apiPermission  none
+     * @apiVersion     1.0.0
+     * @apiName        CheckPaymentStatusProducts
+     * @apiGroup       Products
+     * @apiDescription Check the payment status of a product.
+     * @apiExample {curl} Example usage:
+     *
+     * curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X GET "http://zapit-web.herokuapp.com/api/v1/products/payment/status?product-slug=iot"
+     *
+     * @apiSuccess {String} status_code Request status.
+     * @apiSuccess {String[]} data The product details info.
+     * @apiSuccess {String} slug The unique identification of the product.
+     * @apiSuccess {String} name The unique name the product
+     * @apiSuccess {String} price Price of the product.
+     * @apiSuccess {String} description Description of the product.
+     * @apiSuccess {String} payed Payment status for the product.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     *      HTTP/1.1 200 OK
+     *      {
+     *          "status_code" : 200
+     *          "data" :   {
+     *             "slug": "iot",
+     *             "name": "IoT",
+     *             "price": "100",
+     *             "description": "Description of an IoT",
+     *             "payed": "0",
+     *          },
+     *      }
+     */
+
+    /**
+     * Expects a $_GET key of 'product-slug'. The ProductsPayRequest will make sure this exists.
+     * Pay for a product.
+     */
+    public function checkStatusPayment()
+    {
+        IoC::resolve(ProductsPayRequest::class)
+            ->validate();
+
+        $productSlug = $_GET['product-slug'];
+
+        $product = $this->productService->findBySlug($productSlug);
+
+        return $this->respondWithSuccess($this->transformer->transform($product));
     }
 }

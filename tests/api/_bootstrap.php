@@ -6,3 +6,5 @@ require __DIR__.'/../../vendor/autoload.php';
 require __DIR__.'/../../bootstrap/bootstrap.php';
 
 DatabaseMigration::provision();
+
+require __DIR__.'/../../database/commands/exportDbTest.php';

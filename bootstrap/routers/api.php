@@ -10,6 +10,8 @@ use App\Kernel\Router;
 
 $router = IoC::resolve(Router::class);
 
-$router->get('/api/v1/products/pay', IoC::resolve(ProductsController::class), 'pay');
-$router->get('/api/v1/products/reset-payment', IoC::resolve(ProductsController::class), 'reset');
 $router->get('/api/v1/products', IoC::resolve(ProductsController::class), 'index');
+
+$router->get('/api/v1/products/payment/request', IoC::resolve(ProductsController::class), 'requestPayment');
+$router->get('/api/v1/products/payment/reset', IoC::resolve(ProductsController::class), 'resetPayment');
+$router->get('/api/v1/products/payment/status', IoC::resolve(ProductsController::class), 'checkStatusPayment');
