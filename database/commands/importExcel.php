@@ -33,6 +33,6 @@ for ($row = 2; $row <= $highestRow; $row++) {
         'description' => $rowData[3],
     ];
 
-    $product = $productsDbService->updateOrCreate($productSlug);
+    $product = $productsDbService->updateOrCreate($product);
 }
 echo "Done.\n";

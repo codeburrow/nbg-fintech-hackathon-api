@@ -90,7 +90,8 @@ class ProductsCest
 
         $I->assertNotSame(false, $actualProduct = $productDbService->updateOrCreate($expectedData['new']));
 
-        $I->assertEquals($expectedData['new'], $actualProduct);
+        $I->dontSeeInDatabase('products', $expectedData['old']);
+        $I->seeInDatabase('products', $expectedData['new']);
     }
 
     /**
@@ -102,31 +103,17 @@ class ProductsCest
         $productDbService = IoC::resolve(ProductsDbService::class);
 
         $expectedData = [
-            [
-                'old' =>
-                    [
-                        'slug'        => 'expected-slug',
-                        'name'        => 'expected-name-old',
-                        'price'       => 'expected-price-old',
-                        'description' => 'expected-description-old',
-                    ],
-                'new' =>
-                    [
-                        'slug'        => 'expected-slug',
-                        'name'        => 'expected-name-new',
-                        'price'       => 'expected-price-new',
-                        'description' => 'expected-description-new',
-                    ],
-            ],
+            'slug'        => 'expected-slug',
+            'name'        => 'expected-name-old',
+            'price'       => 'expected-price-old',
+            'description' => 'expected-description-old',
         ];
 
         $I->dontSeeInDatabase('products', $expectedData);
 
-        $I->assertNotSame(false, $actualProduct = $productDbService->updateOrCreate($expectedData['new']));
+        $I->assertNotSame(false, $actualProduct = $productDbService->updateOrCreate($expectedData));
 
-        $I->assertEquals($expectedData['new'], $actualProduct);
-
-        $I->seeInDatabase('areas', $expectedData['new']);
+        $I->seeInDatabase('products', $expectedData);
     }
 
     /**
@@ -188,4 +175,5 @@ class ProductsCest
         $I->assertEquals($expectedData,
             array_intersect_key($actualProduct, array_flip(['slug', 'name', 'price', 'description'])));
     }
+
 }

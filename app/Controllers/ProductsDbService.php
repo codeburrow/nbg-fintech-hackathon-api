@@ -36,18 +36,18 @@ class ProductsDbService extends DbManager
     }
 
     /**
-     * Find a product given its id.
+     * Find a product given its slug.
      *
-     * @param $id
+     * @param $slug
      * @return mixed
      */
-    public function findById($id)
+    public function findBySlug($slug)
     {
-        $query = 'SELECT * FROM `'.getenv('DB_NAME').'`.`'.ProductsTableMigration::TABLE_NAME.'` WHERE `id` = :id';
+        $query = 'SELECT * FROM `'.getenv('DB_NAME').'`.`'.ProductsTableMigration::TABLE_NAME.'` WHERE `slug` = :slug';
 
         $statement = $this->getConnection()->prepare($query);
 
-        $statement->bindParam(':id', $id, PDO::PARAM_INT);
+        $statement->bindParam(':slug', $slug, PDO::PARAM_INT);
 
         $statement->execute();
 
@@ -82,6 +82,25 @@ class ProductsDbService extends DbManager
         $statement->bindParam(':oldSlug', $oldSlug, PDO::PARAM_STR);
 
         return $statement->execute();
+    }
+
+    /**
+     * Find a product given its id.
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function findById($id)
+    {
+        $query = 'SELECT * FROM `'.getenv('DB_NAME').'`.`'.ProductsTableMigration::TABLE_NAME.'` WHERE `id` = :id';
+
+        $statement = $this->getConnection()->prepare($query);
+
+        $statement->bindParam(':id', $id, PDO::PARAM_INT);
+
+        $statement->execute();
+
+        return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
     /**
