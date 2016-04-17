@@ -1,6 +1,9 @@
 <?php
 
 
+use App\Controllers\ProductsDbService;
+use App\Kernel\IoC;
+
 class ProductsCest
 {
     public function _before(IntegrationTester $I)
@@ -19,22 +22,18 @@ class ProductsCest
     public function it_creates_product(IntegrationTester $I)
     {
         $expectedData = [
-            'slug'  => 'expected-slug', 'name' => 'expected-name', 'description' => 'expected-description',
-            'price' => 'expected-price'
+            'slug'        => 'expected-slug',
+            'name'        => 'expected-name',
+            'price'       => 'expected-price',
+            'description' => 'expected-description',
         ];
 
         $I->dontSeeInDatabase('products', $expectedData);
 
-        $productDbService = new ProductDbService();
+        $productsDbService = IoC::resolve(ProductsDbService::class);
 
-        $I->assertNotSame(false, $actualProductId = $productDbService->create($expectedData));
-
-        $actualProduct = $productDbService->findBySlug($expectedData['slug']);
+        $I->assertNotSame(false, $actualProductId = $productsDbService->create($expectedData));
 
         $I->seeInDatabase('products', $expectedData);
-
-        $I->assertEquals(
-            $expectedData,
-            array_intersect_key($actualProduct, array_flip(['slug', 'name', 'description', 'price'])));
     }
 }

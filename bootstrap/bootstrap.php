@@ -4,9 +4,11 @@
  * @since 4/7/16
  */
 
+use App\Controllers\ProductsDbService;
 use App\Kernel\DbManager;
 use App\Kernel\IoC;
 use App\Kernel\Router;
+use Cocur\Slugify\Slugify;
 
 try {
     $dotenv = new Dotenv\Dotenv(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR);
@@ -48,4 +50,16 @@ IoC::register(Router::class, function () {
     $router = new Router();
 
     return $router;
+});
+
+IoC::register(ProductsDbService::class, function () {
+    $productsDbService = new ProductsDbService();
+
+    return $productsDbService;
+});
+
+IoC::register(Slugify::class, function () {
+    $slugify = new Slugify();
+
+    return $slugify;
 });
