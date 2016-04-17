@@ -60,4 +60,107 @@ class ProductsCest
         $I->assertEquals($expectedData,
             array_intersect_key($actualProduct, array_flip(['slug', 'name', 'price', 'description'])));
     }
+
+    /**
+     * @test
+     * @param IntegrationTester $I
+     */
+    public function it_updates_product_if_slug_is_found(IntegrationTester $I)
+    {
+        $productDbService = IoC::resolve(ProductsDbService::class);
+
+        $expectedData = [
+            'old' =>
+                [
+                    'slug'        => 'expected-slug',
+                    'name'        => 'expected-name-old',
+                    'price'       => 'expected-price-old',
+                    'description' => 'expected-description-old',
+                ],
+            'new' =>
+                [
+                    'slug'        => 'expected-slug',
+                    'name'        => 'expected-name-new',
+                    'price'       => 'expected-price-new',
+                    'description' => 'expected-description-new',
+                ],
+        ];
+
+        $I->haveInDatabase('products', $expectedData['old']);
+
+        $I->assertNotSame(false, $actualProduct = $productDbService->updateOrCreate($expectedData['new']));
+
+        $I->assertEquals($expectedData['new'], $actualProduct);
+    }
+
+    /**
+     * @test
+     * @param IntegrationTester $I
+     */
+    public function it_creates_product_if_slug_is_not_found(IntegrationTester $I)
+    {
+        $productDbService = IoC::resolve(ProductsDbService::class);
+
+        $expectedData = [
+            [
+                'old' =>
+                    [
+                        'slug'        => 'expected-slug',
+                        'name'        => 'expected-name-old',
+                        'price'       => 'expected-price-old',
+                        'description' => 'expected-description-old',
+                    ],
+                'new' =>
+                    [
+                        'slug'        => 'expected-slug',
+                        'name'        => 'expected-name-new',
+                        'price'       => 'expected-price-new',
+                        'description' => 'expected-description-new',
+                    ],
+            ],
+        ];
+
+        $I->dontSeeInDatabase('products', $expectedData);
+
+        $I->assertNotSame(false, $actualProduct = $productDbService->updateOrCreate($expectedData['new']));
+
+        $I->assertEquals($expectedData['new'], $actualProduct);
+
+        $I->seeInDatabase('areas', $expectedData['new']);
+    }
+
+    /**
+     * @test
+     * @param IntegrationTester $I
+     */
+    public function it_updates_a_product(IntegrationTester $I)
+    {
+        $productDbService = IoC::resolve(ProductsDbService::class);
+
+        $expectedData = [
+            'old' =>
+                [
+                    'slug'        => 'slug-old',
+                    'name'        => 'name-old',
+                    'price'       => 'price-old',
+                    'description' => 'description-old',
+                ],
+            'new' =>
+                [
+                    'slug'        => 'slug-new',
+                    'name'        => 'name-new',
+                    'price'       => 'price-new',
+                    'description' => 'description-new',
+                ],
+        ];
+
+        $I->haveInDatabase('products', $expectedData['old']);
+
+        $I->assertNotEquals(false,
+            $productDbService->updateBySlug($expectedData['new'], $expectedData['old']['slug']));
+
+        $I->dontSeeInDatabase('products', $expectedData['old']);
+
+        $I->seeInDatabase('products', $expectedData['new']);
+    }
 }
