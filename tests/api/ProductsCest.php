@@ -31,7 +31,6 @@ class ProductsCest
         $productsDbService = new ProductDbService();
         $productsDbService->create($data);
 
-//        var_dump($productsDbService->findBySlug('some-slug'));exit;
         $I->assertSame('0', $productsDbService->findBySlug('some-slug')['payed']);
 
         $I->amOnPage("/api/v1/products/pay?product-slug={$data['slug']}");
@@ -66,6 +65,43 @@ class ProductsCest
                 'message'     => "The given product slug does not exist.",
                 'status_code' => 422
             ]
+        ]);
+    }
+
+    /**
+     * @test
+     * @param ApiTester $I
+     */
+    public function it_reads_products_index(ApiTester $I)
+    {
+        $data = [
+            [
+                'slug'        => 'some-slug',
+                'name'        => 'some-name',
+                'price'       => 'some-price',
+                'description' => 'some-description',
+            ],
+            [
+                'slug'        => 'some-slug-2',
+                'name'        => 'some-name-2',
+                'price'       => 'some-price-2',
+                'description' => 'some-description-2',
+            ]
+        ];
+        $productsDbService = new ProductDbService();
+
+        $productsDbService->create($data[0]);
+        $productsDbService->create($data[1]);
+
+        $expectedData = $productsDbService->get();
+
+        $I->amOnPage('/api/v1/products');
+
+        $I->seeCurrentUrlEquals('/api/v1/products');
+
+        $I->seeResponseContainsJson([
+            'status_code' => 200,
+            'data'        => $expectedData
         ]);
     }
 }

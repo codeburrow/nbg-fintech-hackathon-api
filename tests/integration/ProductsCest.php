@@ -205,4 +205,43 @@ class ProductsCest
 
         $I->seeInDatabase('products', $productData + ['payed' => 1]);
     }
+
+    /**
+     * @test
+     * @param IntegrationTester $I
+     */
+    public function it_gets_all_products(IntegrationTester $I)
+    {
+        $expectedData = [
+            [
+                'slug'        => 'expected-slug',
+                'name'        => 'expected-name',
+                'price'       => 'expected-price',
+                'description' => 'expected-description',
+                'payed'       => 1,
+            ],
+            [
+                'slug'        => 'expected-slug-2',
+                'name'        => 'expected-name-2',
+                'price'       => 'expected-price-2',
+                'description' => 'expected-description-2',
+                'payed'       => 0,
+            ]
+        ];
+
+        $I->haveInDatabase('products', $expectedData[0]);
+        $I->haveInDatabase('products', $expectedData[1]);
+
+        $productsDbService = new ProductDbService();
+
+        $I->assertSame(2, count(
+            $actualProducts = $productsDbService->get()
+        ));
+
+        $I->assertEquals($expectedData[0],
+            array_intersect_key($actualProducts[0], array_flip(['slug', 'name', 'price', 'description', 'payed'])));
+
+        $I->assertEquals($expectedData[1],
+            array_intersect_key($actualProducts[1], array_flip(['slug', 'name', 'price', 'description', 'payed'])));
+    }
 }

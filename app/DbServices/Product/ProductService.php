@@ -60,4 +60,11 @@ interface ProductService
      * @return bool
      */
     public function payBySlug($slug);
+
+    /**
+     * Get all the products.
+     *
+     * @return mixed
+     */
+    public function get();
 }

@@ -153,4 +153,20 @@ class ProductDbService extends DbManager implements ProductService
 
         return $statement->execute();
     }
+
+    /**
+     * Get all the products.
+     *
+     * @return mixed
+     */
+    public function get()
+    {
+        $query = 'SELECT * FROM `'.getenv('DB_NAME').'`.`'.ProductsTableMigration::TABLE_NAME.'`';
+
+        $statement = $this->getConnection()->prepare($query);
+
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
