@@ -80,7 +80,7 @@ class ProductsController
 
         $productSlug = $_GET['product-slug'];
 
-        if ($this->productService->resetPayment($productSlug)) {
+        if ($this->productService->resetPaymentBySlug($productSlug)) {
             $product = $this->productService->findBySlug($productSlug);
 
             return $this->respondWithSuccess($this->transformer->transform($product));

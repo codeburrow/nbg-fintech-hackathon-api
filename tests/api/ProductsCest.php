@@ -124,7 +124,6 @@ class ProductsCest
         $I->assertSame('1', $productsDbService->findBySlug('some-slug')['payed']);
 
         $I->amOnPage("/api/v1/products/reset-payment?product-slug={$data['slug']}");
-
         $I->seeCurrentUrlEquals("/api/v1/products/reset-payment?product-slug={$data['slug']}");
 
         $I->seeResponseContainsJson([
