@@ -3,6 +3,8 @@
  * @author Rizart Dokollar <r.dokollari@gmail.com
  * @since 4/17/16
  */
+use Colors\Color;
+
 require __DIR__.'/../../vendor/autoload.php';
 require __DIR__.'/../../bootstrap/bootstrap.php';
 
@@ -13,4 +15,6 @@ $exportDbCommand = $dbMysqlCredentials.getenv('DB_NAME').' > '.$databaseLocation
 
 passthru($exportDbCommand);
 
-echo "\nExported database to $databaseLocation.\n";
+$color = new Color();
+echo $color("\nDatabase exported to:\n")->green();
+echo $color("$databaseLocation.\n")->yellow();

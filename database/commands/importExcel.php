@@ -5,6 +5,7 @@
  */
 
 use App\Controllers\ProductsDbService;
+use Colors\Color;
 use Database\migrations\ProductsTableMigration;
 
 require __DIR__.'/../../vendor/autoload.php';
@@ -22,6 +23,9 @@ $sheet = $phpExcel->getSheet(0);
 $highestRow = $sheet->getHighestRow();
 $highestColumn = $sheet->getHighestColumn();
 
+$color = new Color();
+
+echo $color("Importing data from excel:\n")->yellow();
 
 for ($row = 2; $row <= $highestRow; $row++) {
     $rowData = $sheet->rangeToArray('A'.$row.':'.$highestColumn.$row)[0];
@@ -35,4 +39,5 @@ for ($row = 2; $row <= $highestRow; $row++) {
 
     $product = $productsDbService->updateOrCreate($product);
 }
-echo "Done.\n";
+
+echo $color("Done\n")->green();
