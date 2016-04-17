@@ -60,6 +60,48 @@ class ProductsController
     }
 
     /**
+     * @api            {get} api/v1/products Get all products
+     * @apiPermission  none
+     * @apiVersion     1.0.0
+     * @apiName        GetProducts
+     * @apiGroup       Products
+     * @apiDescription Fetch list, with products.
+     * @apiExample {curl} Example usage:
+     *
+     * curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X GET "http://zapit-web.herokuapp.com/api/v1/products"
+     *
+     * @apiSuccess {String} status_code Request status.
+     * @apiSuccess {String[]} data The array with products.
+     * @apiSuccess {String} slug The unique identification for each product.
+     * @apiSuccess {String} name The unique name for each product.
+     * @apiSuccess {String} price Price of the product.
+     * @apiSuccess {String} description Description of the product.
+     * @apiSuccess {String} payed Payment status for the product.
+     *
+     * @apiSuccessExample {json} Success-Response:
+     *      HTTP/1.1 200 OK
+     *      {
+     *          "status_code" : 200
+     *          "data" :  [
+     *              {
+     *                  "slug": "iot",
+     *                  "name": "IoT",
+     *                  "price": "100",
+     *                  "description": "Description of an IoT",
+     *                  "payed": "0",
+     *              },
+     *              {
+     *                  "slug": "cards-against-humanity",
+     *                  "name": "Cards Against Humanity",
+     *                  "price": "25",
+     *                  "description": "Cards Against Humanity is a party game for horrible people. Unlike most of the party games you've played before, Cards Against Humanity is as despicable and awkward as you and your friends. ",
+     *                  "payed": "0",
+     *              },
+     *          ],
+     *      }
+     */
+
+    /**
      * Get all products.
      */
     public function index()
