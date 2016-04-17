@@ -64,9 +64,9 @@ class ProductsTableMigration implements Migration
         $query =
             'CREATE TABLE `'.getenv('DB_NAME').'`.`'.self::TABLE_NAME.'` (
               `id` INT NOT NULL AUTO_INCREMENT,
-              `name` VARCHAR(256) NOT NULL,
-              `slug` VARCHAR(1024) NOT NULL,
-              `price` VARCHAR(45) NOT NULL,
+              `name` TEXT NOT NULL,
+              `slug` TEXT NOT NULL,
+              `price` VARCHAR(255) NOT NULL,
               `description` TEXT NOT NULL,
             PRIMARY KEY (`id`),
             UNIQUE INDEX `name_UNIQUE` (`name` ASC),
