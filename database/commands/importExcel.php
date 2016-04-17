@@ -5,6 +5,8 @@
  */
 
 use App\Controllers\ProductsDbService;
+use App\DbServices\Product\ProductService;
+use App\Kernel\IoC;
 use Colors\Color;
 use Database\migrations\ProductsTableMigration;
 
@@ -16,7 +18,7 @@ ProductsTableMigration::provision();
 $excelPath = __DIR__.'/../../storage/data_set.xlsx';
 $excelName = 'data_set.xlsx';
 
-$productsDbService = new ProductsDbService();
+$productsDbService = IoC::resolve(ProductService::class);
 
 $phpExcel = PHPExcel_IOFactory::load($excelPath);
 $sheet = $phpExcel->getSheet(0);

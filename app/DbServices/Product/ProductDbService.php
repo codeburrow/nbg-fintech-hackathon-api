@@ -142,10 +142,22 @@ class ProductDbService extends DbManager implements ProductService
      */
     public function payBySlug($slug)
     {
+        return $this->updatePaymentStatusBySlug($slug, true);
+    }
+
+    /**
+     * @param $slug
+     * @param $paymentStatus bool True to pay, false to reset.
+     * @return bool
+     */
+    private function updatePaymentStatusBySlug($slug, $paymentStatus)
+    {
+        $paymentStatus = true === $paymentStatus ? '1' : '0';
+
         $query =
-            'UPDATE `'.getenv('DB_NAME').'`.`'.ProductsTableMigration::TABLE_NAME.'` 
-             SET `payed`=\'1\' 
-             WHERE `slug`=:slug;';
+            "UPDATE `".getenv('DB_NAME')."`.`".ProductsTableMigration::TABLE_NAME."` 
+             SET `payed`={$paymentStatus} 
+             WHERE `slug`=:slug;";
 
         $statement = $this->getConnection()->prepare($query);
 
@@ -168,5 +180,16 @@ class ProductDbService extends DbManager implements ProductService
         $statement->execute();
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Change a product payed status to false.
+     *
+     * @param $slug string The slug of the product.
+     * @return bool
+     */
+    public function resetPaymentBySlug($slug)
+    {
+        return $this->updatePaymentStatusBySlug($slug, false);
     }
 }

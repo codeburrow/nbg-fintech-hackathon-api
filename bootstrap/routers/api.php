@@ -11,4 +11,5 @@ use App\Kernel\Router;
 $router = IoC::resolve(Router::class);
 
 $router->get('/api/v1/products/pay', IoC::resolve(ProductsController::class), 'pay');
+$router->get('/api/v1/products/reset-payment', IoC::resolve(ProductsController::class), 'pay');
 $router->get('/api/v1/products', IoC::resolve(ProductsController::class), 'index');

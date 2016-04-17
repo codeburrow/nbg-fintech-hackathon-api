@@ -67,4 +67,12 @@ interface ProductService
      * @return mixed
      */
     public function get();
+
+    /**
+     * Change a product payed status to false.
+     *
+     * @param $slug string The slug of the product.
+     * @return bool
+     */
+    public function resetPaymentBySlug($slug);
 }

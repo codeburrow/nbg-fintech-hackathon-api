@@ -3,7 +3,6 @@
 
 use ApiTester;
 use App\DbServices\Product\ProductDbService;
-use App\Transformers\Api\ProductsApiTransformer;
 
 class ProductsCest
 {
@@ -97,6 +96,36 @@ class ProductsCest
         $I->amOnPage('/api/v1/products');
 
         $I->seeCurrentUrlEquals('/api/v1/products');
+
+        $I->seeResponseContainsJson([
+            'status_code' => 200,
+            'data'        => $expectedData
+        ]);
+    }
+
+    /**
+     * @test
+     * @param ApiTester $I
+     */
+    public function it_resets_product_payment(ApiTester $I)
+    {
+        $data = [
+            'slug'        => 'some-slug',
+            'name'        => 'some-name',
+            'price'       => 'some-price',
+            'description' => 'some-description',
+            'payed'       => 1,
+        ];
+        $expectedData = $data;
+        $expectedData['payed'] = 0;
+        $productsDbService = new ProductDbService();
+        $productsDbService->create($data);
+
+        $I->assertSame('1', $productsDbService->findBySlug('some-slug')['payed']);
+
+        $I->amOnPage("/api/v1/products/reset-payment?product-slug={$data['slug']}");
+
+        $I->seeCurrentUrlEquals("/api/v1/products/reset-payment?product-slug={$data['slug']}");
 
         $I->seeResponseContainsJson([
             'status_code' => 200,

@@ -68,4 +68,24 @@ class ProductsController
 
         return $this->respondWithSuccess($this->transformer->transformCollection($products));
     }
+
+    /**
+     * Expects a $_GET key of 'product-slug'. The ProductsPayRequest will make sure this exists.
+     * Pay for a product.
+     */
+    public function reset()
+    {
+        IoC::resolve(ProductsPayRequest::class)
+            ->validate();
+
+        $productSlug = $_GET['product-slug'];
+
+        if ($this->productService->resetPayment($productSlug)) {
+            $product = $this->productService->findBySlug($productSlug);
+
+            return $this->respondWithSuccess($this->transformer->transform($product));
+        }
+
+        return $this->respondInternalServerError();
+    }
 }

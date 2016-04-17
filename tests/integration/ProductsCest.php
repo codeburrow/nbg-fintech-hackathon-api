@@ -244,4 +244,31 @@ class ProductsCest
         $I->assertEquals($expectedData[1],
             array_intersect_key($actualProducts[1], array_flip(['slug', 'name', 'price', 'description', 'payed'])));
     }
+
+    /**
+     * @test
+     * @param IntegrationTester $I
+     */
+    public function it_reset_product_payment(IntegrationTester $I)
+    {
+        $productData = [
+            'slug'        => 'expected-slug',
+            'name'        => 'expected-name',
+            'price'       => 'expected-price',
+            'description' => 'expected-description',
+            'payed'       => 1,
+        ];
+
+        $expectedData = $productData;
+        $expectedData['payed'] = 0;
+
+        $I->haveInDatabase('products', $productData);
+        $I->seeInDatabase('products', $productData);
+
+        $productsDbService = new ProductDbService();
+
+        $I->assertTrue($productsDbService->resetPaymentBySlug($productData['slug']));
+
+        $I->seeInDatabase('products', $expectedData);
+    }
 }
