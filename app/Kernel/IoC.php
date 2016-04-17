@@ -33,7 +33,7 @@ class IoC
     /**
      * Create the instance.
      *
-     * @param $name
+     * @param      $name
      * @return mixed
      * @throws Exception
      */

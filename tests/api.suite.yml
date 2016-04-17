@@ -1,8 +1,11 @@
-class_name: AcceptanceTester
+class_name: ApiTester
 modules:
     enabled:
-        - \Helper\Acceptance
+        - \Helper\Api
         - Asserts
         - PhpBrowser:
             url: 'https://fintech.app/'
             browser: phantomjs
+        - REST:
+            depends: PhpBrowser
+            url: 'https://fintech.app/'

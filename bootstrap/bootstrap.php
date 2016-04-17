@@ -4,10 +4,14 @@
  * @since 4/7/16
  */
 
-use App\Controllers\ProductsDbService;
+use App\Controllers\Api\V1\ProductsController;
+use App\Controllers\WelcomeController;
+use App\DbServices\Product\ProductDbService;
+use App\DbServices\Product\ProductService;
 use App\Kernel\DbManager;
 use App\Kernel\IoC;
 use App\Kernel\Router;
+use App\Requests\Api\ProductsPayRequest;
 use Cocur\Slugify\Slugify;
 
 try {
@@ -46,20 +50,39 @@ IoC::register(DbManager::class, function () {
     return $dbManager;
 });
 
+IoC::register(WelcomeController::class, function () {
+    $welcomeController = new WelcomeController();
+
+    return $welcomeController;
+});
+
+IoC::register(ProductsController::class, function () {
+    $productsController = new ProductsController(new ProductDbService());
+
+    return $productsController;
+});
+
+
 IoC::register(Router::class, function () {
     $router = new Router();
 
     return $router;
 });
 
-IoC::register(ProductsDbService::class, function () {
-    $productsDbService = new ProductsDbService();
+IoC::register(ProductService::class, function () {
+    $productService = new ProductDbService();
 
-    return $productsDbService;
+    return $productService;
 });
 
 IoC::register(Slugify::class, function () {
     $slugify = new Slugify();
 
     return $slugify;
+});
+
+IoC::register(ProductsPayRequest::class, function () {
+    $productsPayRequest = new ProductsPayRequest(IoC::resolve(ProductService::class));
+
+    return $productsPayRequest;
 });

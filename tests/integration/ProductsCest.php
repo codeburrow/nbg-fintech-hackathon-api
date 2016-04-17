@@ -1,8 +1,7 @@
 <?php
 
 
-use App\Controllers\ProductsDbService;
-use App\Kernel\IoC;
+use App\DbServices\Product\ProductDbService;
 
 class ProductsCest
 {
@@ -30,7 +29,7 @@ class ProductsCest
 
         $I->dontSeeInDatabase('products', $expectedData);
 
-        $productsDbService = IoC::resolve(ProductsDbService::class);
+        $productsDbService = new ProductDbService();
 
         $I->assertNotSame(false, $actualProductId = $productsDbService->create($expectedData));
 
@@ -53,7 +52,7 @@ class ProductsCest
 
         $expectedProductId = $I->haveInDatabase('products', $expectedData);
 
-        $productsDbService = IoC::resolve(ProductsDbService::class);
+        $productsDbService = new ProductDbService();
         $actualProduct = $productsDbService->findBySlug('expected-slug');
 
         $I->assertEquals($expectedProductId, $actualProduct['id']);
@@ -68,7 +67,7 @@ class ProductsCest
      */
     public function it_updates_product_if_slug_is_found(IntegrationTester $I)
     {
-        $productDbService = IoC::resolve(ProductsDbService::class);
+        $productDbService = new ProductDbService();
 
         $expectedData = [
             'old' =>
@@ -103,7 +102,7 @@ class ProductsCest
      */
     public function it_creates_product_if_slug_is_not_found(IntegrationTester $I)
     {
-        $productDbService = IoC::resolve(ProductsDbService::class);
+        $productDbService = new ProductDbService();
 
         $expectedData = [
             'slug'        => 'expected-slug',
@@ -126,7 +125,7 @@ class ProductsCest
      */
     public function it_updates_a_product(IntegrationTester $I)
     {
-        $productDbService = IoC::resolve(ProductsDbService::class);
+        $productDbService = new ProductDbService();
 
         $expectedData = [
             'old' =>
@@ -173,7 +172,7 @@ class ProductsCest
 
         $productId = $I->haveInDatabase('products', $expectedData);
 
-        $productsDbService = IoC::resolve(ProductsDbService::class);
+        $productsDbService = new ProductDbService();
 
         $actualProduct = $productsDbService->findById($productId);
 
@@ -199,7 +198,7 @@ class ProductsCest
         $I->haveInDatabase('products', $productData);
         $I->seeInDatabase('products', $productData + ['payed' => 0]);
 
-        $productsDbService = IoC::resolve(ProductsDbService::class);
+        $productsDbService = new ProductDbService();
 
         $I->assertTrue($productsDbService->payBySlug($productData['slug']));
 

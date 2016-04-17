@@ -4,7 +4,7 @@
  * @since 4/17/16
  */
 
-namespace App\Controllers;
+namespace App\DbServices\Product;
 
 use App\Kernel\DbManager;
 use Database\migrations\ProductsTableMigration;
@@ -13,7 +13,7 @@ use PDO;
 /**
  * Class ProductsDbService provides functions for CRUD operations.
  */
-class ProductsDbService extends DbManager
+class ProductDbService extends DbManager implements ProductService
 {
     /**
      * Update a product if the given slug exists.
