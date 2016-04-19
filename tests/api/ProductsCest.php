@@ -29,6 +29,7 @@ class ProductsCest
             'description' => 'some-description',
         ];
         $expectedData = $data;
+        $expectedData['payed'] = true;
 
         $productsDbService = new ProductDbService();
         $productsDbService->create($data);
@@ -116,10 +117,10 @@ class ProductsCest
             'name'        => 'some-name',
             'price'       => 'some-price',
             'description' => 'some-description',
-            'payed'       => '1',
+            'payed'       => 1,
         ];
         $expectedData = $data;
-        $expectedData['payed'] = 0;
+        $expectedData['payed'] = false;
         $productsDbService = new ProductDbService();
         $productsDbService->create($data);
 
@@ -147,7 +148,7 @@ class ProductsCest
             'description' => 'some-description',
         ];
         $expectedData = $data;
-        $expectedData['payed'] = '0';
+        $expectedData['payed'] = false;
 
         $productsDbService = new ProductDbService();
 

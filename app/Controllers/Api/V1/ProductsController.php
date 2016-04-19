@@ -67,7 +67,7 @@ class ProductsController
      *             "name": "IoT",
      *             "price": "100",
      *             "description": "Description of an IoT",
-     *             "payed": "1",
+     *             "payed": true,
      *          },
      *      }
      */
@@ -121,14 +121,14 @@ class ProductsController
      *                  "name": "IoT",
      *                  "price": "100",
      *                  "description": "Description of an IoT",
-     *                  "payed": "0",
+     *                  "payed": false,
      *              },
      *              {
      *                  "slug": "cards-against-humanity",
      *                  "name": "Cards Against Humanity",
      *                  "price": "25",
      *                  "description": "Cards Against Humanity is a party game for horrible people. Unlike most of the party games you've played before, Cards Against Humanity is as despicable and awkward as you and your friends. ",
-     *                  "payed": "0",
+     *                  "payed": false,
      *              },
      *          ],
      *      }
@@ -172,7 +172,7 @@ class ProductsController
      *             "name": "IoT",
      *             "price": "100",
      *             "description": "Description of an IoT",
-     *             "payed": "0",
+     *             "payed": false,
      *          },
      *      }
      */
@@ -225,7 +225,7 @@ class ProductsController
      *             "name": "IoT",
      *             "price": "100",
      *             "description": "Description of an IoT",
-     *             "payed": "0",
+     *             "payed": false,
      *          },
      *      }
      */

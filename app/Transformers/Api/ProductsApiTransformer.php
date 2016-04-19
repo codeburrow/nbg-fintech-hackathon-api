@@ -22,7 +22,7 @@ class ProductsApiTransformer extends Transformer
             'name'        => $item['name'],
             'price'       => $item['price'],
             'description' => $item['description'],
-            'payed'       => $item['payed'],
+            'payed'       => $item['payed'] === '1' ? true : false,
         ];
     }
 }

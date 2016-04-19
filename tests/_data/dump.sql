@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.7.11, for Linux (x86_64)
 --
--- Host: localhost    Database: fintech_test
+-- Host: localhost    Database: fintech
 -- ------------------------------------------------------
 -- Server version	5.7.11
 
@@ -53,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-04-17 19:04:12
+-- Dump completed on 2016-04-19 13:03:49
