@@ -13,7 +13,8 @@
     "vlucas/phpdotenv": "^2.2",
     "kevinlebrun/colors.php": "^1.0",
     "phpoffice/phpexcel": "^1.8",
-    "cocur/slugify": "^2.1"
+    "cocur/slugify": "^2.1",
+    "nikic/fast-route": "^0.8.0"
   },
   "require-dev": {
     "codeception/codeception": "^2.1"
